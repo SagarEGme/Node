@@ -798,5 +798,13 @@
         "email": "mmanford2r@amazon.co.jp",
         "gender": "Male",
         "job_title": "Tax Accountant"
+    },
+    {
+        "id": 101,
+        "first_name": "sagar",
+        "last_name": "regmi",
+        "email": "hello@gmail.com",
+        "gender": "male",
+        "job_title": "engineer"
     }
 ]
