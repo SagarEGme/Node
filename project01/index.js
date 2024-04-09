@@ -1,8 +1,38 @@
 const express = require("express");
-const data = require("./MOCK_DATA.json")
+// const data = require("./MOCK_DATA.json")
+const mongoose = require("mongoose")
 const app = express();
 const fs = require("fs")
 
+mongoose.connect("mongodb://127.0.0.1:27017/firstApp")
+.then(()=>console.log("Mongoose connnected"))
+.catch((err)=> console.log("error detected", err))
+
+//schema for mongodb
+const userSchema = new mongoose.Schema({
+    firstName:{
+        type:String,
+        required: true,
+    },
+    lastName : {
+        type:String,
+        required:false,
+    },
+    email:{
+        type: String,
+        required: true,
+        unique: true,
+    },
+    jobTitle:{
+        type: String,
+    },
+    gender:{
+        type: String,
+    }
+})
+
+//model for mongodb
+const User = mongoose.model("user",userSchema)
 
 // app.get("/api/users/:uid",(req,res)=>{
 //     const id = Number(req.params.uid);
@@ -47,10 +77,11 @@ app.use((req,res,next)=>{
 })
 
 // for mobile user -> They require data rather than JSON file which can undergo SSR/CSR in browsers
-app.get("/users", (req,res)=>{
+app.get("/users", async(req,res)=>{
+    const allDbUsers = await User.find({});
     const html = `
         <ul>
-            ${data.map((user)=>`<li>${user.first_name}</li>`).join("")}
+            ${allDbUsers.map((user)=>`<li>${user.firstName}</li>`).join("")}
         </ul>
     `
     res.send(html)
@@ -61,13 +92,29 @@ app.get("/api/users",(req,res)=>{
     return res.json(data)
 })
 
-app.post("/api/users",(req,res)=>{
-    const body= req.body;
-    data.push({id:data.length+1 ,...body})
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(data),(err,data)=>{
+// app.post("/api/users",(req,res)=>{
+//     const body= req.body;
+//     data.push({id:data.length+1 ,...body})
+//     fs.writeFile("./MOCK_DATA.json", JSON.stringify(data),(err,data)=>{
 
-        return res.json({status:"pending"})
+//         return res.json({status:"pending"})
+//     })
+// })
+
+
+// for mongodb
+
+app.post("/api/users",async(req,res)=>{
+    const body= req.body;
+    const result = await User.create({
+        firstName:body.first_name,
+        lastName:body.last_name,
+        email:body.email,
+        jobTitle:body.job_title,
+        gender:body.gender,
     })
+    console.log("result" , result)
+    return res.status(201).json({ msg : "success"})
 })
 const PORT = 8000;
 

@@ -1,1 +1,5 @@
 1711629484654 : GET : /api/users
+ 1712635970932 : POST : /api/users
+ 1712636181812 : GET : /
+ 1712636195086 : GET : /users
+ 1712636195350 : GET : /favicon.ico
