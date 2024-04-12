@@ -4,8 +4,9 @@ const URL = require("../models/index")
 
 const router = express.Router();
 
-router.get("/",(req,res)=>{
-    res.render("home")
+router.get("/",async (req,res)=>{
+    const allUrls = await URL.find({});
+    res.render("home",{urls : allUrls})
 })
 
 router.get('/test',async (req,res)=>{
@@ -20,5 +21,13 @@ router.get('/test',async (req,res)=>{
         </html>
     `)
 
+})
+
+router.get("/signup",(req,res)=>{
+    res.render("signup")
+})
+
+router.get("/login",(req,res)=>{
+    res.render("login")
 })
 module.exports = router;
