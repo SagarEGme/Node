@@ -1,21 +1,27 @@
 const express = require("express");
 const URL = require("../models/index")
+const {handleUserSignUp, handleUserLogin} = require("../controllers/user")
+
 
 
 const router = express.Router();
 
-router.get("/",async (req,res)=>{
+router.post("/",handleUserSignUp);
+router.post("/login",handleUserLogin)
+
+router.get("/", async (req, res) => {
+    // if(!req.user) return res.redirect("/login");
     const allUrls = await URL.find({});
-    res.render("home",{urls : allUrls})
+    res.render("home", { urls: allUrls })
 })
 
-router.get('/test',async (req,res)=>{
+router.get('/test', async (req, res) => {
     const allUrls = await URL.find({});
     return res.end(`
         <html>
         <body>
         <ul>
-            ${allUrls.map((url)=>`<li>${url.shortUrl} - ${url.redirectUrl} - ${url.visitHistory.length}</li>`).join("")}
+            ${allUrls.map((url) => `<li>${url.shortUrl} - ${url.redirectUrl} - ${url.visitHistory.length}</li>`).join("")}
         </ul>
         </body>
         </html>
@@ -23,11 +29,11 @@ router.get('/test',async (req,res)=>{
 
 })
 
-router.get("/signup",(req,res)=>{
+router.get("/signup", (req, res) => {
     res.render("signup")
 })
 
-router.get("/login",(req,res)=>{
+router.get("/login", (req, res) => {
     res.render("login")
 })
 module.exports = router;

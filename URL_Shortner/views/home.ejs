@@ -10,6 +10,7 @@
 <body>
     <h1>Hello from home page.</h1>
     <% if (locals.id) { %>
+        <p>hello</p>
         <p>URL generated : http://localhost:8001/url/<%= id %>
         </p>
         <% } %>
@@ -21,8 +22,10 @@
             <br>
             <hr>
             <div>
+                List of urls
                 <% urls.forEach(url=> { %>
                     <li>
+                        urls
                         <%= url.shortUrl %> - <%= url.redirectUrl %> - <%= url.visitHistory.length %>
                     </li>
                     <% }) %>
