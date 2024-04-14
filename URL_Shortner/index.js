@@ -23,9 +23,10 @@ connectToMongoDB("mongodb://127.0.0.1:27017/urlShortner")
     .then(() => console.log("mongodb connected"))
     .catch((err) => console.log("Error Occured: ", err))
 
+// app.use("/url", urlRoute);
 app.use("/url", restrictToLoggedinUserOnly, urlRoute);
-app.use("/",  staticRoute)
-// app.use("/user",checkAuth, userRoute)
+app.use("/",checkAuth,  staticRoute)
+app.use("/user", userRoute)
 
 // app.post("/signup",handleUserSignUp)
 // app.post("/login",handleUserLogin)

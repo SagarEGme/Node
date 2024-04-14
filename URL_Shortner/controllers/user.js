@@ -1,6 +1,6 @@
 const user = require("../models/user");
-const { v4: uuidv4 } = require("uuid");
 const { setUser } = require("../service/auth");
+const URL = require("../models/index")
 
 async function handleUserSignUp(req, res) {
     const { name, email, password } = req.body;
@@ -9,11 +9,11 @@ async function handleUserSignUp(req, res) {
         email,
         password
     })
-    return res.render("home")
+    console.log("user signed up")
+    return res.redirect("/")
 }
 async function handleUserLogin(req, res) {
     const { email, password } = req.body;
-    const allUrls = await user.findOne({});
     const User = await user.findOne({ email, password })
     if (!User) {
         return res.render("login", {
@@ -21,12 +21,12 @@ async function handleUserLogin(req, res) {
         })
     }
 
-    const sessionId = uuidv4();
-    setUser(sessionId, User);
-    res.cookie("uid", sessionId);
+   const token =  setUser(User);
+    res.cookie("uid", token);
 
-    return res.render("home")
-}
+    console.log("user logged in")
+    return res.redirect("/")
+} 
 
 module.exports = {
     handleUserSignUp,

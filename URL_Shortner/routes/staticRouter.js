@@ -10,7 +10,7 @@ router.post("/",handleUserSignUp);
 router.post("/login",handleUserLogin)
 
 router.get("/", async (req, res) => {
-    // if(!req.user) return res.redirect("/login");
+    
     const allUrls = await URL.find({});
     res.render("home", { urls: allUrls })
 })

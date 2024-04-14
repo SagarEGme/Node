@@ -4,19 +4,20 @@ const URL = require("../models")
 async function handleGenerateNewShortURl(req, res) {
     const body = req.body;
     if (!body.url) return res.status(400).json({ error: "Url must be supplied" })
-    console.log(body.url, "url")
+    console.log( "url" ,body.url)
     const shortID = shortid();
 
     await URL.create({
         shortUrl: shortID,
         redirectUrl: body.url,
         visitHistory: [],
-        createdBy: req.user._id,
+        // createdBy: req.user._id,
     })
+    console.log('short url created')
 
-    // const allUrls = await URL.find({});
+    const allUrls = await URL.find({});
     // console.log("all", allUrls)
-    return res.render("home", { id: shortID})
+    return res.render("home", { id: shortID, urls:allUrls})
     // return res.json({ id : shortID})
 }
 
