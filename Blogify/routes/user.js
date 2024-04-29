@@ -1,35 +1,47 @@
-const {Router} = require("express");
-const user = require("../models/user")
+const { Router } = require("express");
+const user = require("../models/user");
 
 const router = Router();
 
-router.get("/signup",(req,res)=>{
-    res.render("signup")
-})
-router.get("/signin",(req,res)=>{
-    res.render("signin")
-})
+router.get("/signup", (req, res) => {
+    return res.render("signup");
+});
 
-router.post("/signup",(req,res)=>{
-    const {fullName,email,password} = req.body;
-    user.create({
-        fullName,
-        email,
-        password,
-    })
-    return res.redirect("/")
-})
+router.get("/signin", (req, res) => {
+    res.render("signin");
+});
 
-router.post("/signin",async (req,res)=>{
+router.post("/signup", async (req, res) => {
+    const { fullName, email, password } = req.body;
     try {
-        const {email,password} = req.body;
-    const token = await user.matchPasswordAndGenerateToken(email,password);
-    return res.cookie("token",token).redirect("/")
+        const newUser = await user.create({
+            fullName,
+            email,
+            password,
+        });
+        console.log("New user created:", newUser);
+        return res.redirect("/");
     } catch (error) {
-        return res.render("login",{
-            error:"Incorrect email or password"
-        })
+        console.error("Error creating user:", error);
+        return res.status(500).send("Error creating user");
     }
+});
 
-})
+router.post("/signin", async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const token = await user.matchPasswordAndGenerateToken(email, password);
+        res.cookie("token", token).redirect("/");
+    } catch (error) {
+        console.error("Error signing in:", error);
+        return res.render("signin", {
+            error: "Incorrect email or password",
+        });
+    }
+});
+
+router.get("/logout", (req, res) => {
+    res.clearCookie("token").redirect("/");
+});
+
 module.exports = router;

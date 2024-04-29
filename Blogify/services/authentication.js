@@ -13,7 +13,7 @@ function createTokenForUser(user){
 }
 
 function validateToken(token){
-    const payload = JWT.validate(token,secret);
+    const payload = JWT.verify(token,secret);
     return payload;
 }
 
