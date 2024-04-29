@@ -4,6 +4,7 @@ const cookieparser = require("cookie-parser")
 const path= require("path")
 const userRoute = require("./routes/user")
 const blogRoute = require("./routes/blog")
+const Blog = require("./models/blog")
 const {checkForAuthenticationCookie}  = require("./middlewares/authentication")
 
 const app = express()
@@ -14,15 +15,18 @@ app.set("views", path.resolve("./views"))
 app.use(express.urlencoded({extended:false}));
 app.use(cookieparser());
 app.use(checkForAuthenticationCookie("token"))
+app.use(express.static(path.resolve("./public")))
 
 mongoose.connect("mongodb://localhost:27017/blogbook").then(()=> console.log("MongoDB connected"))
 
 app.use("/users",userRoute)
 app.use("/blogs",blogRoute)
 
-app.get("/",(req,res)=>{
+app.get("/",async (req,res)=>{
+    const allBlogs = await Blog.find({});
     res.render("home",{
         user : req.user,
+        blogs:allBlogs,
     })
 })
 
