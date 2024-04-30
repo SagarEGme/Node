@@ -9,20 +9,23 @@
 <body>
     <%- include("./partials/navbar") %>
         <div class="container mt-3">
-            <% blogs.forEach(blog=> { %>
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <img src="<%= blog.coverImageURL %>" alt="image" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= blog.title %>
-                            </h5>
-                            <a href="/blogs/<%= blog._id %>" class="card-link">Read More</a>
+            <div class="row row-cols-4">
+                <% blogs.forEach(blog=> { %>
+                    <div class="col">
+                        <div class="card col" style="width: 15rem ;height:22rem; justify-content: center; align-items: center; display: flex;">
+                            <div class="card-body">
+                                <img src="<%= blog.coverImageURL %>" alt="image" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= blog.title %>
+                                    </h5>
+                                    <a href="/blogs/<%= blog._id %>" class="card-link">Read More</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <% }) %>
+                    <% }) %>
+            </div>
         </div>
 
         <%- include("./partials/scripts") %>
